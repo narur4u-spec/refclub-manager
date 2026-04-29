@@ -1,0 +1,21 @@
+{
+  "overview": "A full-featured admin dashboard for managing a 200-member business referral club across 5 chapters. Track member profiles with business details, chapter attendance, referrals given and received, and send broadcast messages to all members or specific chapters.",
+  "features": [
+    "Member directory with business profiles and chapter assignment",
+    "Attendance tracking per meeting with history per member",
+    "Referral logging — track referrals given and received with deal status",
+    "Broadcast messaging to all members or by chapter",
+    "Dashboard overview with member count, upcoming meetings, and quick stats",
+    "Admin login with Internet Identity for secure access"
+  ],
+  "category": "productivity",
+  "tags": [
+    "referral",
+    "networking",
+    "membership",
+    "attendance",
+    "business-club",
+    "admin-dashboard"
+  ],
+  "last_updated": "2026-04-29T06:29:16.936Z"
+}

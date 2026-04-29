@@ -1,0 +1,170 @@
+type Timestamp = int;
+type ReferralId = nat;
+type Referral = 
+ record {
+   businessCategory: text;
+   createdAt: Timestamp;
+   dealStatus: DealStatus;
+   dealValue: opt nat;
+   giverId: MemberId;
+   id: ReferralId;
+   notes: text;
+   receiverId: MemberId;
+ };
+type MessageId = nat;
+type Message = 
+ record {
+   body: text;
+   chapterId: opt ChapterId;
+   id: MessageId;
+   recipientCount: nat;
+   sentAt: Timestamp;
+   subject: text;
+ };
+type MemberImport = 
+ record {
+   businessCategory: text;
+   businessName: text;
+   chapterId: ChapterId;
+   email: text;
+   name: text;
+   phone: text;
+   website: text;
+ };
+type MemberId = nat;
+type Member = 
+ record {
+   businessCategory: text;
+   businessName: text;
+   chapterId: ChapterId;
+   createdAt: Timestamp;
+   email: text;
+   id: MemberId;
+   isActive: bool;
+   name: text;
+   phone: text;
+   website: text;
+ };
+type MeetingId = nat;
+type Meeting = 
+ record {
+   chapterId: ChapterId;
+   date: Timestamp;
+   description: text;
+   id: MeetingId;
+   location: text;
+   title: text;
+ };
+type LeaderboardEntry = 
+ record {
+   businessName: text;
+   chapterId: ChapterId;
+   memberId: MemberId;
+   memberName: text;
+   referralCount: nat;
+ };
+type ImportResult = 
+ record {
+   errors: vec text;
+   imported: nat;
+   skipped: nat;
+ };
+type DealStatus = 
+ variant {
+   closed;
+   in_progress;
+   pending;
+ };
+type DashboardStats = 
+ record {
+   chapterCount: nat;
+   meetingCount: nat;
+   memberCount: nat;
+   messageCount: nat;
+   referralCount: nat;
+ };
+type ChapterId = nat;
+type Chapter = 
+ record {
+   description: text;
+   id: ChapterId;
+   name: text;
+ };
+type AttendanceStatus = 
+ variant {
+   absent;
+   present;
+ };
+type AttendanceReportRow = 
+ record {
+   absentCount: nat;
+   attendanceRate: float64;
+   chapterId: ChapterId;
+   chapterName: text;
+   meetingDate: Timestamp;
+   meetingId: MeetingId;
+   meetingTitle: text;
+   memberDetails: vec AttendanceReportMemberDetail;
+   totalAttendees: nat;
+ };
+type AttendanceReportMemberDetail = 
+ record {
+   memberId: MemberId;
+   memberName: text;
+   status: AttendanceStatus;
+ };
+type AttendanceRecord = 
+ record {
+   id: AttendanceId;
+   markedAt: Timestamp;
+   meetingId: MeetingId;
+   memberId: MemberId;
+   status: AttendanceStatus;
+ };
+type AttendanceId = nat;
+service : {
+  addMeeting: (title: text, chapterId: ChapterId, date: Timestamp, location:
+   text, description: text) -> (Meeting);
+  addMember: (name: text, businessName: text, businessCategory: text, email:
+   text, phone: text, website: text, chapterId: ChapterId) -> (Member);
+  addReferral: (giverId: MemberId, receiverId: MemberId, businessCategory:
+   text, dealStatus: DealStatus, dealValue: opt nat, notes: text) ->
+   (Referral);
+  deleteMeeting: (id: MeetingId) -> (bool);
+  deleteMember: (id: MemberId) -> (bool);
+  deleteReferral: (id: ReferralId) -> (bool);
+  getAllReferrals: () -> (vec Referral) query;
+  getAttendanceByMeeting: (meetingId: MeetingId) ->
+   (vec AttendanceRecord) query;
+  getAttendanceByMember: (memberId: MemberId) -> (vec AttendanceRecord) query;
+  getAttendanceReport: (chapterId: opt ChapterId, fromDate: opt Timestamp,
+   toDate: opt Timestamp) -> (vec AttendanceReportRow) query;
+  getChapter: (id: ChapterId) -> (opt Chapter) query;
+  getDashboardStats: () -> (DashboardStats) query;
+  getLeaderboard: (chapterId: opt ChapterId) -> (vec LeaderboardEntry) query;
+  getMeeting: (id: MeetingId) -> (opt Meeting) query;
+  getMember: (id: MemberId) -> (opt Member) query;
+  getMessage: (id: MessageId) -> (opt Message) query;
+  getMessages: () -> (vec Message) query;
+  getReferralsByGiver: (giverId: MemberId) -> (vec Referral) query;
+  getReferralsByReceiver: (receiverId: MemberId) -> (vec Referral) query;
+  importMembers: (members: vec MemberImport) -> (ImportResult);
+  listChapters: () -> (vec Chapter) query;
+  listMeetings: () -> (vec Meeting) query;
+  listMeetingsByChapter: (chapterId: ChapterId) -> (vec Meeting) query;
+  listMembers: () -> (vec Member) query;
+  listMembersByChapter: (chapterId: ChapterId) -> (vec Member) query;
+  markAttendance: (meetingId: MeetingId, memberId: MemberId, status:
+   AttendanceStatus) -> (AttendanceRecord);
+  sendMessage: (subject: text, body: text, chapterId: opt ChapterId) ->
+   (Message);
+  updateAttendance: (id: AttendanceId, status: AttendanceStatus) ->
+   (opt AttendanceRecord);
+  updateMeeting: (id: MeetingId, title: text, chapterId: ChapterId, date:
+   Timestamp, location: text, description: text) -> (opt Meeting);
+  updateMember: (id: MemberId, name: text, businessName: text,
+   businessCategory: text, email: text, phone: text, website: text,
+   chapterId: ChapterId, isActive: bool) -> (opt Member);
+  updateReferral: (id: ReferralId, businessCategory: text, dealStatus:
+   DealStatus, dealValue: opt nat, notes: text) -> (opt Referral);
+}

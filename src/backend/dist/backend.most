@@ -1,0 +1,107 @@
+// Version: 1.0.0
+type AttendanceId__1047620299 = AttendanceId__91187254;
+type AttendanceId__91187254 = Nat;
+type AttendanceRecord__699091857 =
+  {
+    id : AttendanceId__1047620299;
+    markedAt : Timestamp__301639476;
+    meetingId : MeetingId__834315507;
+    memberId : MemberId__1016087353;
+    status : AttendanceStatus__1021638340
+  };
+type AttendanceStatus__1021638340 = {#absent; #present};
+type ChapterId__202794786 = Nat;
+type ChapterId__220671189 = ChapterId__202794786;
+type ChapterId__23799380 = ChapterId__202794786;
+type ChapterId__497764937 = ChapterId__202794786;
+type Chapter__633650587 =
+  {description : Text; id : ChapterId__497764937; name : Text};
+type DealStatus__569223723 = {#closed; #in_progress; #pending};
+type List__415060402<T> = List__790383201<T>;
+type List__790383201<T> =
+  {
+    var blockIndex : Nat__490723111;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__490723111
+  };
+type MeetingId__236162309 = Nat;
+type MeetingId__834315507 = MeetingId__236162309;
+type Meeting__95497461 =
+  {
+    chapterId : ChapterId__23799380;
+    date : Timestamp__301639476;
+    description : Text;
+    id : MeetingId__834315507;
+    location : Text;
+    title : Text
+  };
+type MemberId__1016087353 = MemberId__2990653;
+type MemberId__126673757 = MemberId__2990653;
+type MemberId__2990653 = Nat;
+type MemberId__987463908 = MemberId__2990653;
+type Member__276774007 =
+  {
+    businessCategory : Text;
+    businessName : Text;
+    chapterId : ChapterId__497764937;
+    createdAt : Timestamp__301639476;
+    email : Text;
+    id : MemberId__126673757;
+    isActive : Bool;
+    name : Text;
+    phone : Text;
+    website : Text
+  };
+type MessageId__159367956 = MessageId__291319400;
+type MessageId__291319400 = Nat;
+type Message__714344397 =
+  {
+    body : Text;
+    chapterId : ?ChapterId__220671189;
+    id : MessageId__159367956;
+    recipientCount : Nat;
+    sentAt : Timestamp__301639476;
+    subject : Text
+  };
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type ReferralId__1047179609 = Nat;
+type ReferralId__379317983 = ReferralId__1047179609;
+type Referral__954995839 =
+  {
+    businessCategory : Text;
+    createdAt : Timestamp__301639476;
+    dealStatus : DealStatus__569223723;
+    dealValue : ?Nat;
+    giverId : MemberId__987463908;
+    id : ReferralId__379317983;
+    notes : Text;
+    receiverId : MemberId__987463908
+  };
+type Timestamp__301639476 = Int;
+actor {
+  stable attendanceState :
+    {
+      attendance : List__415060402<AttendanceRecord__699091857>;
+      meetings : List__415060402<Meeting__95497461>;
+      var nextAttendanceId : AttendanceId__91187254;
+      var nextMeetingId : MeetingId__236162309
+    };
+  stable memberState :
+    {
+      chapters : List__415060402<Chapter__633650587>;
+      members : List__415060402<Member__276774007>;
+      var nextMemberId : MemberId__2990653
+    };
+  stable messageState :
+    {
+      members : List__415060402<Member__276774007>;
+      messages : List__415060402<Message__714344397>;
+      var nextMessageId : MessageId__291319400
+    };
+  stable referralState :
+    {
+      var nextReferralId : ReferralId__1047179609;
+      referrals : List__415060402<Referral__954995839>
+    }
+};
